@@ -1,0 +1,56 @@
+/* Button.module.css */
+.base {
+    width: 100%;
+    padding: 14px 18px;
+    font-family: var(--font-main);
+    font-size: 15px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary {
+    font-weight: 700;
+    color: #1a1206;
+    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+    box-shadow: 0 10px 24px rgba(224, 167, 33, 0.35);
+}
+.primary:hover:not(:disabled) { transform: translateY(-2px); }
+.primary:disabled {
+    background: var(--glass-bg);
+    color: var(--color-text-faint);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: var(--color-text-dim);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.row:hover { background: var(--glass-bg-hover); }
+
+.rowActive {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--color-gold-light);
+    background: rgba(251, 191, 36, 0.12);
+    border-color: rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.15);
+}
+
+.ghost {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-text-dim);
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+}
+.ghost:hover { background: var(--glass-bg-hover); }

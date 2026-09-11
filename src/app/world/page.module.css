@@ -1,0 +1,320 @@
+.pageWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    width: min(96vw, 986px);
+}
+
+.gameWindow {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-main);
+    user-select: none;
+}
+
+.sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #bfe6ff 0%, #eaf7ff 55%, #d8f0c8 100%);
+}
+
+/* 플레이 영역: 하단 HUD 높이(56px)만큼 위로 밀어서, 절대 HUD와 안 겹치게 분리 */
+.playfield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 56px;
+    overflow: hidden;
+}
+
+.world {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2400px;
+    height: 100%;
+    will-change: transform;
+}
+
+.ground {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(180deg, #7fb95a 0%, #5a8f3e 100%);
+    box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.25);
+}
+
+.player {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: center bottom;
+    transition: bottom 0.02s linear;
+    z-index: 5;
+}
+
+.playerHead {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.playerHair {
+    position: absolute;
+    top: -9px;
+    left: 2px;
+    width: 30px;
+    height: 15px;
+    border-radius: 40% 40% 0 0;
+}
+
+.playerBody {
+    width: 24px;
+    height: 34px;
+    margin-top: 2px;
+    background: linear-gradient(180deg, #60a5fa, #3b82f6);
+    border-radius: 7px 7px 3px 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transition: transform 0.1s ease;
+}
+
+.playerAttacking { transform: rotate(-8deg); }
+
+.attackSlash {
+    position: absolute;
+    top: 20px;
+    left: 36px;
+    width: 26px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+    border-radius: 4px;
+    box-shadow: 0 0 8px #fff;
+}
+
+.npc {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 4;
+}
+.npcHead {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e6b98a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.npcBody {
+    width: 26px;
+    height: 32px;
+    margin-top: 2px;
+    background: #6b7f5e;
+    border-radius: 6px 6px 3px 3px;
+}
+.npcName {
+    position: absolute;
+    top: -22px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2f3b26;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+.interactHint {
+    position: absolute;
+    top: -42px;
+    font-size: 11px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 3px 8px;
+    border-radius: 8px;
+    white-space: nowrap; /* 누락됐던 부분 — 세로로 깨지던 원인 */
+    animation: bounce 1s infinite ease-in-out;
+}
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.portal {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 3;
+}
+.portalRing {
+    width: 46px;
+    height: 70px;
+    border-radius: 50% / 40%;
+    background: radial-gradient(ellipse at center, rgba(147, 197, 253, 0.6) 0%, rgba(96, 165, 250, 0.2) 60%, transparent 100%);
+    border: 3px solid rgba(191, 219, 254, 0.8);
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+    animation: portalPulse 2s infinite ease-in-out;
+}
+@keyframes portalPulse {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+.portalLabel {
+    margin-top: 6px;
+    font-size: 10px;
+    color: #1e3a8a;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.slime {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 4;
+}
+.slimeBody {
+    width: 30px;
+    height: 20px;
+    background: linear-gradient(180deg, #6ee7b7, #10b981);
+    border-radius: 50% 50% 40% 40%;
+    box-shadow: inset 0 -4px 6px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.2);
+    animation: slimeSquish 0.6s infinite ease-in-out;
+}
+@keyframes slimeSquish {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.85) scaleX(1.08); }
+}
+.slimeHpBarWrap {
+    width: 30px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+.slimeHpBar {
+    height: 100%;
+    background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+/* HUD: 플레이 영역과 분리된 고정 높이 바 */
+.hud {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(10, 10, 10, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+.hudLeft { display: flex; flex-direction: column; color: #fff; min-width: 70px; }
+.hudName { font-size: 12px; font-weight: 700; }
+.hudLevel { font-size: 10px; color: rgba(255, 255, 255, 0.6); }
+
+.barGroup { flex: 1; display: flex; flex-direction: column; gap: 3px; max-width: 320px; }
+.barRow { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #fff; }
+.barTrack {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.hpFill { height: 100%; background: linear-gradient(90deg, #f87171, #dc2626); transition: width 0.2s ease; }
+.mpFill { height: 100%; background: linear-gradient(90deg, #60a5fa, #2563eb); transition: width 0.2s ease; }
+.expFill { height: 100%; background: linear-gradient(90deg, #ffe38a, #e0a721); transition: width 0.2s ease; }
+
+.dialogBox {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 66px;
+    padding: 16px 18px;
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    z-index: 20;
+    backdrop-filter: blur(8px);
+}
+.dialogName { margin: 0 0 6px; font-size: 12px; font-weight: 700; color: #ffe38a; }
+.dialogText { margin: 0 0 10px; font-size: 13px; color: #fff; line-height: 1.5; }
+.dialogNext {
+    padding: 6px 14px;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffe38a, #e0a721);
+    color: #1a1206;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toast {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 20px;
+    z-index: 30;
+    white-space: nowrap;
+    animation: toastIn 0.2s ease;
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, -8px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.exitButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    cursor: pointer;
+    z-index: 30;
+}
+
+/* 조작법 안내 — 게임 창 바깥, 아래쪽 캡션 */
+.controlsHint {
+    margin: 0;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+}
