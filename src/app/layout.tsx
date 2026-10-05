@@ -1,36 +1,26 @@
-import type { Metadata } from "next";
-// import localFont from "next/font/local";
-import { Gothic_A1 } from "next/font/google";
-import "./globals.css";
-
-// const maplestory = localFont({
-//       src: [
-//             {
-//                   path: "../../public/fonts/MaplestoryLight.ttf",
-//                   weight: "300",
-//             },
-//             {
-//                   path: "../../public/fonts/MaplestoryBold.ttf",
-//                   weight: "700",
-//             },
-//       ],
-//       variable: "--font-maplestory",
-// });
-
-const gothicA1 = Gothic_A1({
-      weight: ["400", "500", "700", "900"],
-      subsets: ["latin"],
-      variable: "--font-main",
-});
+import type { Metadata, Viewport } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-      title: "Ginkgo Story",
-      description: "메이플스토리 짭",
+      title: 'Ginkgo Story',
+      description: '은행잎이 흩날리는 이야기 속으로',
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export const viewport: Viewport = {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 1,
+      userScalable: false,
+      viewportFit: 'cover',
+};
+
+export default function RootLayout({
+      children,
+}: Readonly<{
+      children: React.ReactNode;
+}>) {
       return (
-            <html lang="ko" className={gothicA1.variable}>
+            <html lang="ko">
                   <body>{children}</body>
             </html>
       );
