@@ -70,7 +70,7 @@ export default function LoginPage() {
                               />
                         </div>
 
-                        <section className={styles.loginArea}>
+                        <section className={styles.loginArea}> 
                               <Image
                                     src="/images/lobby/wood-frame.png"
                                     alt=""
@@ -99,9 +99,7 @@ export default function LoginPage() {
                                           </label>
 
                                           <label className={styles.inputBox}>
-                                                <span className={styles.passwordIcon}>
-                                                      ◆
-                                                </span>
+                                                <span className={styles.passwordIcon}>◆</span>
 
                                                 <input
                                                       type="password"
@@ -151,11 +149,7 @@ export default function LoginPage() {
 
                                     <div className={styles.divider}>
                                           <span />
-
-                                          <p>
-                                                간편 로그인
-                                          </p>
-
+                                          <p>간편 로그인</p>
                                           <span />
                                     </div>
 

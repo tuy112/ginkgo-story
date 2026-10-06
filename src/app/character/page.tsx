@@ -83,10 +83,7 @@ export default function CharacterCreatePage() {
                                     </div>
 
                                     <div className={styles.row}>
-                                          <label>
-                                                성별
-                                          </label>
-
+                                          <label>성별</label>
                                           <div className={styles.gender}>
                                                 <button
                                                       type="button"
@@ -166,15 +163,7 @@ export default function CharacterCreatePage() {
                                           type="button"
                                           className={styles.createButton}
                                     >
-                                          <span>
-                                                🍃
-                                          </span>
-
                                           캐릭터 생성
-
-                                          <span>
-                                                🍃
-                                          </span>
                                     </button>
 
                                     <button
@@ -246,14 +235,10 @@ export default function CharacterCreatePage() {
                         </section>
                   </section>
 
+                  {/* 가로모드 안내 페이지 */}
                   <section className={styles.rotate}>
-                        <div>
-                              ↻
-                        </div>
-
-                        <strong>
-                              화면을 가로로 돌려주세요
-                        </strong>
+                        <div>↻</div>
+                        <strong>화면을 가로로 돌려주세요</strong>
                   </section>
             </main>
       );
