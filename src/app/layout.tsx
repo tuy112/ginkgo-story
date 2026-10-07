@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next';
+import GlobalClickSound from '@/components/GlobalClickSound';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -21,7 +23,10 @@ export default function RootLayout({
 }>) {
       return (
             <html lang="ko">
-                  <body>{children}</body>
+                  <body>
+                        <GlobalClickSound />
+                        {children}
+                  </body>
             </html>
       );
 }
