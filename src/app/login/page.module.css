@@ -43,6 +43,45 @@
       transform: rotate(10deg);
 }
 
+/* 잎 (떨어지는 효과) */
+.leafField {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      pointer-events: none;
+}
+
+.leaf {
+      position: absolute;
+      top: -12%;
+      display: block;
+      max-width: none;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 3px rgba(47, 61, 24, 0.28));
+      animation: leafFall linear infinite;
+      will-change: transform;
+}
+
+@keyframes leafFall {
+      0% {
+            transform: translate3d(0, -12vh, 0) rotate(0deg) scale(0.76);
+      }
+      25% {
+            transform: translate3d(var(--leaf-drift), 18vh, 0) rotate(100deg) scale(1);
+      }
+      54% {
+            transform: translate3d(var(--leaf-drift-back), 55vh, 0) rotate(215deg) scale(0.9);
+      }
+      78% {
+            transform: translate3d(var(--leaf-drift), 82vh, 0) rotate(305deg) scale(0.95);
+      }
+      100% {
+            transform: translate3d(var(--leaf-drift-back), 115vh, 0) rotate(var(--leaf-spin)) scale(0.78);
+      }
+}
+
 .logoArea {
       position: absolute;
       top: 4%;
@@ -249,61 +288,41 @@
       white-space: nowrap;
 }
 
-/* 소셜 로그인 버튼 */
-.social {
-      display: flex;
-      flex-shrink: 0;
-      align-items: center;
-      justify-content: center;
-      gap: 4%;
-      margin-top: 2%;
-      padding-bottom: 4%;
+/* 개발자 홈페이지 바로가기 */
+.footerActions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3%;
+      margin-top: auto;
+      padding: 2% 0 4%;
 }
 
-.social button {
+.developerButton,
+.exitButton {
       display: flex;
-      box-sizing: border-box;
-      flex-shrink: 0;
       align-items: center;
       justify-content: center;
-      width: clamp(24px, 2.8vw, 40px);
-      height: auto;
-      aspect-ratio: 1;
-      padding: 0;
-      border: 1px solid rgba(178, 146, 103, 0.35);
-      border-radius: 25%;
-      box-shadow: 0 2px 4px rgba(83, 61, 31, 0.15);
-      font-size: clamp(10px, 1.1vw, 16px);
+      min-width: 0;
+      height: clamp(22px, 2.7vw, 36px);
+      border: 1px solid #d7bd91;
+      border-radius: clamp(7px, 0.8vw, 10px);
+      font-size: clamp(7px, 0.82vw, 12px);
       font-weight: 900;
+      text-decoration: none;
       cursor: pointer;
-      transition: transform 0.12s ease;
 }
 
-.social button:active {
-      transform: scale(0.92);
-}
-
-.google {
+.developerButton {
       background: #fff;
-      color: #4285f4;
+      color: #5f7542;
 }
 
-.kakao {
-      background: #fee500;
-      color: #2d2119;
+.exitButton {
+      background: linear-gradient(180deg, #9a7048, #74502f);
+      color: #fff8e8;
 }
 
-.naver {
-      background: #03c75a;
-      color: #fff;
-}
-
-.apple {
-      background: #fff;
-      color: #222;
-}
-
-/* 하단 용사 + 슬라임 */
+/* 하단 메인용사 + 슬라임 */
 .heroArea {
       position: absolute;
       bottom: 1%;
@@ -326,6 +345,39 @@
       filter: drop-shadow(
             0 7px 5px rgba(34, 64, 28, 0.18)
       );
+}
+
+/* 브금 버튼 */
+.musicButton {
+      position: absolute;
+      top: 3%;
+      right: 2.5%;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      width: clamp(30px, 3.2vw, 44px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 245, 203, 0.72);
+      border-radius: 50%;
+      background: rgba(22, 62, 50, 0.72);
+      color: #fff2c8;
+      font-size: clamp(15px, 1.5vw, 21px);
+      font-weight: 800;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+}
+
+.musicPlaying {
+      border-color: #ffe29a;
+      background: rgba(73, 101, 46, 0.88);
+      color: #ffe29a;
+      box-shadow: 0 0 12px rgba(255, 222, 137, 0.38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+      .leafField {
+            display: none;
+      }
 }
 
 .version {

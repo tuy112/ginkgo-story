@@ -1,10 +1,22 @@
 'use client';
 
 import Image from 'next/image';
-import { FormEvent, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 import styles from './page.module.css';
+
+const leafImages = [
+      '/images/lobby/ginkgo-03.png',
+      '/images/lobby/leaf-01.png',
+      '/images/lobby/leaf-02.png',
+      '/images/lobby/leaf-03.png',
+      '/images/lobby/leaf-04.png',
+      '/images/lobby/leaf-05.png',
+      '/images/lobby/leaf-06.png',
+      '/images/lobby/leaf-08.png',
+      '/images/lobby/leaf-10.png',
+];
 
 export default function LoginPage() {
       const router = useRouter();
@@ -13,6 +25,42 @@ export default function LoginPage() {
       const [password, setPassword] = useState('');
       const [autoLogin, setAutoLogin] = useState(false);
 
+      // 브금
+      const [musicPlaying, setMusicPlaying] = useState(true);
+      const audioRef = useRef<HTMLAudioElement>(null);
+      
+      const toggleMusic = async () => {
+            const audio = audioRef.current;
+            if (!audio) return;
+            if (musicPlaying) {
+                  audio.pause();
+                  setMusicPlaying(false);
+                  return;
+            }
+            try {
+                  await audio.play();
+                  setMusicPlaying(true);
+            } catch {
+                  setMusicPlaying(false);
+            }
+      };
+
+      useEffect(() => {
+            const audio = audioRef.current;
+            if (!audio) return;
+            audio.loop = true;
+            audio.volume = 0.4;
+            if (musicPlaying) {
+                  void audio.play().catch(() => setMusicPlaying(false));
+            } else {
+                  audio.pause();
+            }
+      }, [musicPlaying]);
+      useEffect(() => () => {
+            audioRef.current?.pause();
+      }, []);
+
+      // 로그인 버튼 기능
       const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
 
@@ -22,6 +70,14 @@ export default function LoginPage() {
       return (
             <main className={styles.page}>
                   <section className={styles.game}>
+                        {/* 브금 재생 */}
+                        <audio
+                              ref={audioRef}
+                              src="/audio/ginkgo-first-breeze.mp3"
+                              loop
+                              preload="auto"
+                        />
+
                         <Image
                               src="/images/lobby/main-bg.png"
                               alt=""
@@ -31,7 +87,30 @@ export default function LoginPage() {
                               sizes="100vw"
                         />
 
+                        {/* 햇빛 + 나뭇잎 효과 */}
                         <div className={styles.sunLight} />
+                        <div className={styles.leafField} aria-hidden="true">
+                              {Array.from({ length: 16 }, (_, i) => (
+                                    <Image
+                                          key={i}
+                                          src={leafImages[i % leafImages.length]}
+                                          alt=""
+                                          width={64}
+                                          height={64}
+                                          className={styles.leaf}
+                                          style={{
+                                                left: `${(i * 37 + 8) % 100}%`,
+                                                width: `${16 + (i * 5) % 14}px`,
+                                                height: 'auto',
+                                                animationDelay: `${-(i * 1.73 % 20)}s`,
+                                                animationDuration: `${17 + (i * 7) % 13}s`,
+                                                '--leaf-drift': `${(i * 31) % 180 - 90}px`,
+                                                '--leaf-drift-back': `${90 - (i * 19) % 180}px`,
+                                                '--leaf-spin': `${180 + (i * 73) % 360}deg`,
+                                          } as CSSProperties}
+                                    />
+                              ))}
+                        </div>
 
                         <div className={styles.logoArea}>
                               <Image
@@ -149,48 +228,44 @@ export default function LoginPage() {
 
                                     <div className={styles.divider}>
                                           <span />
-                                          <p>간편 로그인</p>
+                                          <p>만든 이의 이야기</p>
                                           <span />
                                     </div>
 
-                                    <div className={styles.social}>
+                                    <div className={styles.footerActions}>
+                                          <a
+                                                className={styles.developerButton}
+                                                href="https://jstory-next.vercel.app/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                          >
+                                                개발자 홈페이지
+                                          </a>
                                           <button
                                                 type="button"
-                                                className={styles.google}
-                                                aria-label="Google 로그인"
+                                                className={styles.exitButton}
+                                                onClick={() => window.close()}
                                           >
-                                                G
-                                          </button>
-
-                                          <button
-                                                type="button"
-                                                className={styles.kakao}
-                                                aria-label="Kakao 로그인"
-                                          >
-                                                K
-                                          </button>
-
-                                          <button
-                                                type="button"
-                                                className={styles.naver}
-                                                aria-label="Naver 로그인"
-                                          >
-                                                N
-                                          </button>
-
-                                          <button
-                                                type="button"
-                                                className={styles.apple}
-                                                aria-label="Apple 로그인"
-                                          >
-                                                ●
+                                                끝내기
                                           </button>
                                     </div>
                               </form>
                         </section>
 
+                        {/* 배경음 버튼 */}
+                        <button
+                              type="button"
+                              className={`${styles.musicButton} ${musicPlaying ? styles.musicPlaying : ''}`}
+                              onClick={toggleMusic}
+                              aria-label={musicPlaying ? '배경음악 끄기' : '배경음악 켜기'}
+                              aria-pressed={musicPlaying}
+                              title={musicPlaying ? '숲의 첫 바람 · 재생 중' : '숲의 첫 바람 · 배경음악 켜기'}
+                        >
+                              ♫
+                        </button>
+
                         <div className={styles.version}>
-                              GINKGO STORY
+                              GINKGO STORY v0.1
                         </div>
                   </section>
 
