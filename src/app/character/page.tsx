@@ -8,21 +8,61 @@ import {
       JobId,
       tempJobs,
 } from '@/lib/data/jobs';
+import { saveCharacter } from "@/lib/game-session";
 
 import styles from './page.module.css';
 
-type Gender = 'male' | 'female';
+type Stats = {
+      str: number;
+      dex: number;
+      int: number;
+      luk: number;
+};
 
 export default function CharacterCreatePage() {
       const router = useRouter();
 
       const [name, setName] = useState('');
-      const [gender, setGender] = useState<Gender>('male');
       const [jobId, setJobId] = useState<JobId>('warrior');
+      
+      // 스탯
+      const [stats, setStats] = useState<Stats | null>(null);
+      const rollStat = () =>
+            Math.floor(Math.random() * 6) +
+            Math.floor(Math.random() * 6) +
+            Math.floor(Math.random() * 6) +
+            3;
+      const rollStats = () => {
+            setStats({
+                  str: rollStat(),
+                  dex: rollStat(),
+                  int: rollStat(),
+                  luk: rollStat(),
+            });
+      };
 
       const selectedJob =
             tempJobs.find((job) => job.id === jobId) ??
             tempJobs[0];
+
+      // 캐릭터 생성 버튼
+      const handleCreateCharacter = () => {
+            if (!name.trim()) {
+                  alert("캐릭터 이름을 입력해 주세요.");
+                  return;
+            }
+            if (!stats) {
+                  alert("능력치를 먼저 굴려 주세요.");
+                  return;
+            }
+
+            saveCharacter({
+                  name: name.trim(),
+                  job: selectedJob.id,
+                  stats,
+            });
+            router.push("/world");
+      };
 
       return (
             <main className={styles.page}>
@@ -47,23 +87,14 @@ export default function CharacterCreatePage() {
                               />
 
                               <div className={styles.formContent}>
-                                    <h1>
-                                          캐릭터 생성
-                                    </h1>
+                                    <h1>캐릭터 생성</h1>
 
                                     <div className={styles.sectionTitle}>
-                                          <span>
-                                                ◆
-                                          </span>
-
+                                          <span>◆</span>
                                           캐릭터 정보
                                     </div>
-
                                     <div className={styles.row}>
-                                          <label htmlFor="characterName">
-                                                캐릭터명
-                                          </label>
-
+                                          <label htmlFor="characterName">캐릭터명</label>
                                           <div className={styles.nameInput}>
                                                 <input
                                                       id="characterName"
@@ -75,59 +106,39 @@ export default function CharacterCreatePage() {
                                                             setName(event.target.value)
                                                       }
                                                 />
-
-                                                <span>
-                                                      {name.length}/12
-                                                </span>
+                                                <span>{name.length}/12</span>
                                           </div>
                                     </div>
 
                                     <div className={styles.row}>
-                                          <label>성별</label>
-                                          <div className={styles.gender}>
+                                          <label>능력치</label>
+                                          <div className={styles.statsControl}>
+                                                <div className={styles.stats}>
+                                                      {[
+                                                            { code: 'STR', value: stats?.str },
+                                                            { code: 'DEX', value: stats?.dex },
+                                                            { code: 'INT', value: stats?.int },
+                                                            { code: 'LUK', value: stats?.luk },
+                                                      ].map(stat => (
+                                                            <div className={styles.stat} key={stat.code}>
+                                                                  <span>{stat.code}</span>
+                                                                  <strong>{stat.value ?? '—'}</strong>
+                                                            </div>
+                                                      ))}
+                                                </div>
                                                 <button
                                                       type="button"
-                                                      className={
-                                                            gender === 'male'
-                                                                  ? styles.selectedGender
-                                                                  : ''
-                                                      }
-                                                      onClick={() =>
-                                                            setGender('male')
-                                                      }
+                                                      className={styles.rollButton}
+                                                      onClick={rollStats}
+                                                      aria-label="능력치 주사위 굴리기"
                                                 >
-                                                      <span className={styles.male}>
-                                                            ♂
-                                                      </span>
-
-                                                      남자
-                                                </button>
-
-                                                <button
-                                                      type="button"
-                                                      className={
-                                                            gender === 'female'
-                                                                  ? styles.selectedGender
-                                                                  : ''
-                                                      }
-                                                      onClick={() =>
-                                                            setGender('female')
-                                                      }
-                                                >
-                                                      <span className={styles.female}>
-                                                            ♀
-                                                      </span>
-
-                                                      여자
+                                                      🎲 굴리기
                                                 </button>
                                           </div>
                                     </div>
 
                                     <div className={styles.jobSection}>
-                                          <label>
-                                                직업
-                                          </label>
-
+                                          <label>직업</label>
                                           <div className={styles.jobs}>
                                                 {tempJobs.map((job) => (
                                                       <button
@@ -150,10 +161,7 @@ export default function CharacterCreatePage() {
                                                                         sizes="8vw"
                                                                   />
                                                             </span>
-
-                                                            <strong>
-                                                                  {job.name}
-                                                            </strong>
+                                                            <strong>{job.name}</strong>
                                                       </button>
                                                 ))}
                                           </div>
@@ -162,6 +170,7 @@ export default function CharacterCreatePage() {
                                     <button
                                           type="button"
                                           className={styles.createButton}
+                                          onClick={handleCreateCharacter}
                                     >
                                           캐릭터 생성
                                     </button>
@@ -176,6 +185,7 @@ export default function CharacterCreatePage() {
                               </div>
                         </section>
 
+                        {/* 미리보기 */}
                         <section className={styles.previewPanel}>
                               <Image
                                     src="/images/lobby/character-preview-frame.png"
@@ -199,13 +209,8 @@ export default function CharacterCreatePage() {
                                     </div>
 
                                     <div className={styles.jobInfo}>
-                                          <h2>
-                                                ⚔ {selectedJob.name}
-                                          </h2>
-
-                                          <p>
-                                                {selectedJob.description}
-                                          </p>
+                                          <h2>⚔ {selectedJob.name}</h2>
+                                          <p>{selectedJob.description}</p>
                                     </div>
 
                                     <div className={styles.previewJobs}>

@@ -124,41 +124,58 @@
       font-size: clamp(6px, 0.65vw, 9px);
 }
 
-.gender {
+/* 스탯 */
+.statsControl {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4%;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2%;
 }
 
-.gender button {
+.stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2%;
+}
+
+.stat {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6%;
+      min-width: 0;
       height: clamp(22px, 2.8vw, 40px);
       border: 1px solid #dec49a;
       border-radius: clamp(7px, 0.8vw, 12px);
       background: rgba(255, 255, 255, 0.65);
-      color: #79644b;
-      font-size: clamp(8px, 0.9vw, 13px);
+}
+
+.stat span {
+      color: #8a765c;
+      font-size: clamp(6px, 0.65vw, 9px);
       font-weight: 800;
 }
 
-.gender .selectedGender {
-      border-color: #dca936;
+.stat strong {
+      color: #4e3a25;
+      font-size: clamp(8px, 0.9vw, 13px);
+}
+
+.rollButton {
+      height: clamp(22px, 2.8vw, 40px);
+      padding: 0 8px;
+      border: 1px solid #dca936;
+      border-radius: clamp(7px, 0.8vw, 12px);
       background: #fff5d5;
-      box-shadow:
-            inset 0 0 0 1px rgba(255, 193, 47, 0.25);
+      color: #725323;
+      font-size: clamp(7px, 0.8vw, 11px);
+      font-weight: 900;
+      white-space: nowrap;
+      cursor: pointer;
 }
 
-.male {
-      color: #318eea;
-      font-size: 1.6em;
-}
-
-.female {
-      color: #ed7f83;
-      font-size: 1.6em;
+.rollButton:active {
+      transform: translateY(2px);
 }
 
 .jobSection {
@@ -294,11 +311,11 @@
 
 .jobInfo h2 {
       margin-bottom: 7%;
-      font-size: clamp(10px, 1.3vw, 18px);
+      font-size: clamp(15px, 1.3vw, 18px);
 }
 
 .jobInfo p {
-      font-size: clamp(6px, 0.72vw, 10px);
+      font-size: clamp(10px, 0.72vw, 10px);
       font-weight: 700;
       line-height: 1.7;
 }
